@@ -1,0 +1,35 @@
+version: "3"
+services:
+
+  influxdb:
+    image: influxdb
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    restart: always
+    volumes:
+      - ./influxdb:/var/lib/influxdb
+    networks:
+      - monitor
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "80:3000"
+    restart: always
+    networks:
+      - monitor
+    volumes:
+      - ./grafana:/var/lib/grafana
+    environment: 
+      - GF_SERVER_ROOT_URL=http://grafana.monitor.com
+      - GF_AUTH_DISABLE_LOGIN_FORM=false
+      - GF_AUTH_GOOGLE_ENABLED=true
+      - GF_AUTH_GOOGLE_CLIENT_ID=012345678912-testestest.apps.googleusercontent.com
+      - GF_AUTH_GOOGLE_CLIENT_SECRET=rhtsjyrkjytjkydtjyjdyj
+      - GF_AUTH_GOOGLE_ALLOWED_DOMAINS=grafana.com
+      - GF_AUTH_GOOGLE_ALLOW_SIGN_UP=true
+
+
+networks:
+  monitor:
